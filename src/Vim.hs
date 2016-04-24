@@ -6,6 +6,8 @@ import Text.Parsec
 import Text.Parsec.ByteString
 import qualified Data.ByteString.Char8 as BC
 import Data.ByteString.Char8 (ByteString, dropWhile)
+-- $setup
+-- >>> :set -XOverloadedStrings
 
 type Input = ByteString
 type IndentLevel = Int
@@ -38,6 +40,13 @@ toVimLines = folder . map rawLine . BC.lines
                                 (BC.unwords . map rawContent $ h:currentLine)
                                     : folder rest
 
+-- |
+-- >>> head $ toVimLines "Foobar is good"
+-- Line 0 "Foobar is good"
+-- >>> head $ toVimLines "    Foobar is good"
+-- Line 4 "Foobar is good"
+-- >>> head $ toVimLines "Foobar is good\n    \\   so is gup"
+-- Line 0 "Foobar is good so is gup"
 
 rawLine :: Input -> RawLine
 rawLine l = let (thisIndent, body) = BC.span isSpace l
@@ -46,3 +55,10 @@ rawLine l = let (thisIndent, body) = BC.span isSpace l
                      Just ('\\', r) -> Continued (BC.dropWhile isSpace r)
                      _ -> RawLine (BC.length thisIndent) body
 
+-- |
+-- >>> rawLine "Foo"
+-- RawLine 0 "Foo"
+-- >>> rawLine "    Foo"
+-- RawLine 4 "Foo"
+-- >>> rawLine "  \\ foo"
+-- Continued "foo"
