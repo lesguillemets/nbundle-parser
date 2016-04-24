@@ -1,8 +1,8 @@
-name:                bundle-parser
+name:                nbundle-parser
 version:             0.1.0.0
 -- synopsis:            
 -- description:         
-homepage:            https://github.com/lesguillemets/bundle-parser
+homepage:            https://github.com/lesguillemets/nbundle-parser
 license:             MIT
 license-file:        LICENSE
 author:              lesguillemets
