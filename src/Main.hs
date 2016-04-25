@@ -3,9 +3,9 @@ import Data.ByteString.Char8 (ByteString)
 import System.Directory (getHomeDirectory)
 import System.FilePath ((</>))
 
-import Vim
+import Vim.VimLine as VL
 
 main = do
     home <- getHomeDirectory
     BC.readFile (home </> ".vimrc") >>=
-        mapM_ (BC.putStrLn . Vim.lineContent) . Vim.toVimLines
+        mapM_ (BC.putStrLn . VL.lineContent) . VL.toVimLines

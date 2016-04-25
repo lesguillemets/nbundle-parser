@@ -15,7 +15,7 @@ cabal-version:       >=1.10
 
 executable bundle-parser
   main-is:             Main.hs
-  other-modules:       Vim
+  other-modules:       Vim.VimLine
                      , Vim.NeoBundle
                      , Vim.VimValue
   other-extensions:    OverloadedStrings

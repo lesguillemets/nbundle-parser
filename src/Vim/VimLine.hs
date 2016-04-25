@@ -1,5 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
-module Vim where
+module Vim.VimLine where
 import Data.List
 import Data.Char (isSpace)
 import Text.Parsec
