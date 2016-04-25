@@ -24,6 +24,8 @@ nbsimple = do
 neobundleLazy = do
     _ <- string "NeoBundleLazy" <* spaces
     bundleName <- quoted <* spaces <* char ',' <* spaces
+    -- FIXME : dirty ad hoc workaround
+    branch <- skipMany (noneOf "{")
     options <- fromVimDict <$> vimDict
     return $ NeoBundleLazy bundleName (fromMap options)
     where
