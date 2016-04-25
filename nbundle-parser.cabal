@@ -18,6 +18,7 @@ executable bundle-parser
   other-modules:       Vim.VimLine
                      , Vim.NeoBundle
                      , Vim.VimValue
+                     , Vim.Parser
   other-extensions:    OverloadedStrings
   build-depends:       base >=4.8 && <4.9
                      , bytestring
