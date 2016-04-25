@@ -4,6 +4,8 @@ module Vim.NeoBundle where
 import qualified Data.ByteString.Char8 as BC
 import Data.ByteString.Char8 (ByteString)
 import Data.Monoid
+import Data.Map.Strict (Map, findWithDefault, fromList)
+import Vim.VimValue
 
 type BundleName = ByteString
 data NeoBundle = NeoBundle BundleName
@@ -12,6 +14,21 @@ data NeoBundle = NeoBundle BundleName
 data BundleOptions = BundleOptions {
     _autoLoad :: AutoLoad
 }
+fromMap:: Map ByteString VimValue -> BundleOptions
+fromMap m =
+    let lookupDict = findWithDefault (VimDict [])
+        lookupList = findWithDefault (VimList [])
+        VimDict al =  lookupDict "autoload" m
+        autoload = fromList al
+        -- FIXME : here be dragons
+        unstring (VimString x) = BC.unpack x
+        unlist (VimList xs) = xs
+        cmds = map unstring . unlist $ lookupList "commands" autoload
+        fts = map unstring . unlist $ lookupList "filetypes" autoload
+        in
+            BundleOptions (AutoLoad cmds fts)
+
+
 data AutoLoad = AutoLoad {_auCmds :: [String], _auFTs :: [String]}
 
 

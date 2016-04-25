@@ -4,6 +4,7 @@ module Vim.Parser where
 import Text.Parsec
 import Text.Parsec.ByteString
 import Data.ByteString.Char8 (ByteString, pack)
+import Data.Map.Strict
 
 import Vim.VimLine
 import Vim.VimValue
@@ -12,8 +13,21 @@ import Vim.NeoBundle
 -- $setup
 -- >>> :set -XOverloadedStrings
 
-parseNeoBundle :: VimLine -> NeoBundle
-parseNeoBundle = undefined
+neobundle :: Parsec ByteString u NeoBundle
+neobundle = try neobundleLazy <|> nbsimple
+
+nbsimple :: Parsec ByteString u NeoBundle
+nbsimple = do
+    _ <- spaces *> string "NeoBundle" <* spaces
+    NeoBundle <$> quoted
+
+neobundleLazy = do
+    _ <- string "NeoBundleLazy" <* spaces
+    bundleName <- quoted <* spaces <* char ',' <* spaces
+    options <- fromVimDict <$> vimDict
+    return $ NeoBundleLazy bundleName (fromMap options)
+    where
+        fromVimDict (VimDict kvp) = fromList kvp
 
 vimValue :: Parsec ByteString u VimValue
 vimValue = vimString <|> vimList <|> vimDict
