@@ -8,6 +8,7 @@ import Text.Parsec
 
 import Vim.VimLine as VL
 import Vim.Parser
+import Vim.NeoBundle.Yaml
 
 isBundle :: VimLine -> Bool
 isBundle (VimLine _ c) = "NeoBundle" `isPrefixOf` c
@@ -15,5 +16,6 @@ isBundle (VimLine _ c) = "NeoBundle" `isPrefixOf` c
 main = do
     home <- getHomeDirectory
     BC.readFile (home </> ".vimrc") >>=
-        mapM_ print . rights . map (parse neobundle "" . lineContent)
+        mapM_ (BC.putStrLn . BC.unlines . toYamlEntry)
+            . rights . map (parse neobundle "" . lineContent)
             . filter isBundle . VL.toVimLines

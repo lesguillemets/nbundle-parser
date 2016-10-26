@@ -17,6 +17,7 @@ library
   hs-source-dirs:      src
   exposed-modules:     Vim.VimLine
                      , Vim.NeoBundle
+                     , Vim.NeoBundle.Yaml
                      , Vim.VimValue
                      , Vim.Parser
   build-depends:       base >=4.8 && <5
